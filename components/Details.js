@@ -3,8 +3,7 @@ import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import FormContainer from './FormContainer'
 
-const Details = ({ setOpenDetails, itemID, setItemID, itemName, setItemName, itemQuantity, setItemQuantity, itemUnit,
-  setItemUnit, checked1, setChecked1, checked2, setChecked2 }) => {
+const Details = ({ openDetails, setOpenDetails }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Detaylar</Text>

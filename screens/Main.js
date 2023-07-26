@@ -14,20 +14,30 @@ const Main = () => {
     const [itemUnit, setItemUnit] = useState("bos");
     const [checked1, setChecked1] = useState("Satın Alma");
     const [checked2, setChecked2] = useState("hammadde");
-    const [date, setDate] = useState(new Date());
     const [stockItems, setStockItems] = useState([]);
 
-    const handleAddItem = () => {
-        setDate((new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString());
-        console.log((new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString())
+    function deleteStockHandler(id) {
+        setStockItems(prevStockItems => {
+            const newStockItems = prevStockItems.filter(item => item.id !== id);
+            return newStockItems;
+        });
+    }
+
+
+    function handleAddItem() {
+        let date = (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString();
 
         if (itemID !== "" && itemName !== "" && itemQuantity !== "" && itemUnit !== "bos") {
-            setStockItems(prevStockItems => [...prevStockItems, { itemID: itemID, itemName: itemName, itemQuantity: itemQuantity, itemUnit: itemUnit, type1: checked1, type2: checked2 }]);
+            setStockItems(prevStockItems => [...prevStockItems,
+            {
+                id: Math.random().toString(), itemID: itemID, itemName: itemName, itemQuantity: itemQuantity,
+                itemUnit: itemUnit, type1: checked1, type2: checked2, date: date
+            }]);
 
             setItemID("");
             setItemName("");
             setItemQuantity("");
-            setItemUnit("");
+            setItemUnit("bos");
         }
         else {
             alert("Lütfen Bilgileri Tam Giriniz.");
@@ -48,10 +58,8 @@ const Main = () => {
     return (
         <View style={styles.container}>
 
-            <Modal visible={openDetails} transparent={true} animationType={"slide"}>
-                <Details setOpenDetails={setOpenDetails} itemName={itemName} setItemName={setItemName} itemQuantity={itemQuantity} setItemQuantity={setItemQuantity}
-                    itemUnit={itemUnit} setItemUnit={setItemUnit} checked1={checked1} setChecked1={setChecked1} checked2={checked2} setChecked2={setChecked2}
-                    stockItems={stockItems} setStockItems={setStockItems} />
+            <Modal visible={openDetails === false ? false : true} transparent={true} animationType={"slide"}>
+                <Details openDetails={openDetails} setOpenDetails={setOpenDetails} stockItems={stockItems} setStockItems={setStockItems} />
             </Modal>
 
             <View>
@@ -64,7 +72,9 @@ const Main = () => {
 
             <FlatList
                 data={stockItems}
+                refreshing={true}
                 showsVerticalScrollIndicator={false}
+                alwaysBounceHorizontal={false}
                 ListHeaderComponentStyle={{ paddingHorizontal: 20 }}
                 ListHeaderComponent={
                     <View>
@@ -72,24 +82,23 @@ const Main = () => {
                             itemQuantity={itemQuantity} setItemQuantity={setItemQuantity} itemUnit={itemUnit} setItemUnit={setItemUnit}
                             itemName={itemName} setItemName={setItemName} itemID={itemID} setItemID={setItemID} />
 
-                        <TouchableOpacity style={styles.button} onPress={handleAddItem}>
+                        <TouchableOpacity style={styles.button} onPress={handleAddItem} >
                             <Text style={styles.buttonText}>Stok Kartı Ekle</Text>
                         </TouchableOpacity>
                     </View>
                 }
-                renderItem={({ item, index }) => (
-                    <RenderedItem key={index} item={item} setOpenModal={setOpenModal} setOpenDetails={setOpenDetails} />
+                renderItem={({ item }) => (
+                    <RenderedItem item={item} setOpenModal={setOpenModal} setOpenDetails={setOpenDetails} deleteStockHandler={deleteStockHandler} />
                 )}
                 ListFooterComponent={
                     stockItems.length > 0 ?
                         <Text style={{ textAlign: "center", color: "#515151" }}>End of List</Text>
                         : null}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(item) => { return item.id.toString() }}
             />
         </View>
     );
 };
-
 export default Main
 
 const styles = StyleSheet.create({

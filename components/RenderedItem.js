@@ -3,24 +3,25 @@ import React from "react"
 import { View } from "react-native"
 import { StyleSheet, Text, TouchableOpacity } from "react-native"
 
-const RenderedItem = ({ item, setOpenModal, setOpenDetails }) => {
+const RenderedItem = (props) => {
     return (
-        <TouchableOpacity style={styles.itemContainer} onPress={() => { setOpenModal(true) }}>
+        <TouchableOpacity style={styles.itemContainer} onPress={() => { props.setOpenModal(true) }}>
             <View style={{ flexDirection: "column" }}>
-                <Text style={styles.itemName}>{item.itemID} - {item.itemName}</Text>
-                <Text style={styles.itemQuantity}>{item.itemQuantity} {item.itemUnit} {item.type1 === "Üretim" ? "üretildi." : item.type1 === "Satış" ? " satıldı." : "satın alındı"}</Text>
+                <Text style={styles.itemName}>{props.item.itemID} - {props.item.itemName}</Text>
+                <Text style={styles.itemQuantity}>{props.item.itemQuantity} {props.item.itemUnit} {props.item.type1 === "Üretim" ? "üretildi." : props.item.type1 === "Satış" ? " satıldı." : "satın alındı"}</Text>
             </View>
 
-            <View style={{ flexDirection: "column" }}>
-                <TouchableOpacity style={styles.button} onPress={() => { setOpenModal(false); setOpenDetails(true); }}>
+            <View style={{ flexDirection: "column", alignItems: "flex-end" }}>
+                <TouchableOpacity style={styles.button} onPress={() => { props.setOpenModal(false); props.setOpenDetails(props.item); }}>
                     <Ionicons name={"pencil"} size={16} color={"#414141"} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => { props.deleteStockHandler(props.item.id) }}>
                     <Ionicons name={"trash"} size={16} color={"#414141"} />
                 </TouchableOpacity>
-            </View>
 
+                <Text style={styles.itemDate}>{props.item.date}</Text>
+            </View>
         </TouchableOpacity>
     )
 }
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginHorizontal: 20,
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     itemName: {
         fontSize: 20,
@@ -49,6 +50,10 @@ const styles = StyleSheet.create({
         color: "#414141",
         marginLeft: 15,
     },
+    itemDate: {
+        fontSize: 12,
+        color: "#414141",
+    },
     button: {
         alignItems: "center",
         justifyContent: "center",
@@ -57,9 +62,7 @@ const styles = StyleSheet.create({
         borderColor: "gray",
         padding: 6,
         marginBottom: 4,
-    },
-    buttonText: {
-        fontSize: 16,
-        color: "#414141",
+        width: 32,
+        height: 32,
     },
 })
