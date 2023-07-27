@@ -1,14 +1,24 @@
 import { Picker } from '@react-native-picker/picker'
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
+import darkColors from '../assets/colors/darkColors'
+import lightColors from '../assets/colors/lightColors'
+import { ThemeContext } from '../ThemeProvider'
 
 const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuantity,
     setItemQuantity, itemUnit, setItemUnit, itemID, setItemID, itemName, setItemName, }) => {
+
+    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+
+    const theme = isDarkMode ? darkColors : lightColors;
+
     return (
         <View style={styles.formContainer}>
             <TextInput
-                style={styles.input}
+                style={[styles.input, {
+                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                }]}
                 placeholder="Ürün Kodu"
                 value={itemID}
                 onChangeText={text => setItemID(text)}
@@ -16,17 +26,19 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
             />
 
             <TextInput
-                style={styles.input}
+                style={[styles.input, {
+                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                }]}
                 placeholder="Ürün Adı"
                 value={itemName}
                 onChangeText={text => setItemName(text)}
                 maxLength={10}
             />
 
-            <View style={styles.pickerContainer}>
+            <View style={[styles.pickerContainer, { backgroundColor: theme.Input, borderColor: theme.Border }]}>
                 <Picker selectedValue={itemUnit} onValueChange={(itemValue, itemIndex) => {
                     setItemUnit(itemValue)
-                }} style={styles.picker} >
+                }} style={[styles.picker, { color: theme.Text }]} >
                     <Picker.Item label="Lütfen Birim Seçiniz" value="bos" />
                     <Picker.Item label="Adet" value="adet" />
                     <Picker.Item label="Çuval" value="çuval" />
@@ -52,7 +64,9 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
             </View>
 
             <TextInput
-                style={styles.input}
+                style={[styles.input, {
+                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                }]}
                 placeholder="Miktar"
                 value={itemQuantity}
                 onChangeText={text => setItemQuantity(text)}
@@ -65,7 +79,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="Üretim"
                         status={checked1 === "Üretim" ? "checked" : "unchecked"}
-                        onPress={() => setChecked1("Üretim")} color={"blue"}
+                        onPress={() => setChecked1("Üretim")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Üretim</Text>
                 </View>
@@ -74,7 +88,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="Satın Alma"
                         status={checked1 === "Satın Alma" ? "checked" : "unchecked"}
-                        onPress={() => setChecked1("Satın Alma")} color={"red"}
+                        onPress={() => setChecked1("Satın Alma")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Satın Alma</Text>
                 </View>
@@ -83,7 +97,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="Satış"
                         status={checked1 === "Satış" ? "checked" : "unchecked"}
-                        onPress={() => setChecked1("Satış")} color={"green"}
+                        onPress={() => setChecked1("Satış")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Satış</Text>
                 </View>
@@ -94,7 +108,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="hammadde"
                         status={checked2 === "hammadde" ? "checked" : "unchecked"}
-                        onPress={() => setChecked2("hammadde")} color={"red"}
+                        onPress={() => setChecked2("hammadde")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Hammadde</Text>
                 </View>
@@ -103,7 +117,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="yarımamul"
                         status={checked2 === "yarımamul" ? "checked" : "unchecked"}
-                        onPress={() => setChecked2("yarımamul")} color={"blue"}
+                        onPress={() => setChecked2("yarımamul")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Yarı Mamul</Text>
                 </View>
@@ -112,7 +126,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                     <RadioButton
                         value="mamul"
                         status={checked2 === "mamul" ? "checked" : "unchecked"}
-                        onPress={() => setChecked2("mamul")} color={"green"}
+                        onPress={() => setChecked2("mamul")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
                     <Text>Mamul</Text>
                 </View>
@@ -126,27 +140,18 @@ export default FormContainer
 const styles = StyleSheet.create({
     input: {
         height: 40,
-        borderColor: "gray",
         borderWidth: 1,
         borderRadius: 20,
         marginBottom: 10,
         paddingHorizontal: 20,
-        backgroundColor: "lightgray",
-        placeholderTextColor: "gray",
-        color: "#414141",
         fontSize: 18,
     },
     pickerContainer: {
         height: 40,
-        borderColor: "gray",
         borderWidth: 1,
         borderRadius: 20,
         marginBottom: 10,
-        backgroundColor: "lightgray",
         justifyContent: "center",
-    },
-    picker: {
-        color: "#414141",
     },
     radioButtonContainer: {
         flexDirection: "row",

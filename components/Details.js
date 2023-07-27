@@ -1,9 +1,27 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import FormContainer from './FormContainer'
 
-const Details = ({ openDetails, setOpenDetails }) => {
+const Details = ({ openDetails, setOpenDetails, setStockItems }) => {
+  const [id, setID] = useState(openDetails.id);
+  const [itemID, setItemID] = useState(openDetails.itemID);
+  const [itemName, setItemName] = useState(openDetails.itemName);
+  const [itemQuantity, setItemQuantity] = useState(openDetails.itemQuantity);
+  const [itemUnit, setItemUnit] = useState(openDetails.itemUnit);
+  const [checked1, setChecked1] = useState(openDetails.type1);
+  const [checked2, setChecked2] = useState(openDetails.type2);
+
+  function edit() {
+    setStockItems(prevStockItems => {
+      return prevStockItems.map(obj =>
+        obj.id === id ? { ...obj, id: id, itemID: itemID, itemName: itemName, itemQuantity: itemQuantity, itemUnit: itemUnit, type1: checked1, type2: checked2 } : obj
+      );
+    });
+    alert("Stok Başarıyla Güncellendi!")
+    setOpenDetails(false);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Detaylar</Text>
@@ -12,7 +30,7 @@ const Details = ({ openDetails, setOpenDetails }) => {
         itemQuantity={itemQuantity} setItemQuantity={setItemQuantity} itemUnit={itemUnit} setItemUnit={setItemUnit}
         itemName={itemName} setItemName={setItemName} itemID={itemID} setItemID={setItemID} />
 
-      <TouchableOpacity style={styles.button} onPress={() => { setOpenDetails(false) }}>
+      <TouchableOpacity style={styles.button} onPress={edit}>
         <Ionicons name={"close"} size={24} color={"#414141"} />
         <Text style={styles.buttonText}>Okay</Text>
       </TouchableOpacity>

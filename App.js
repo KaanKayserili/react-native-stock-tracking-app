@@ -1,9 +1,12 @@
 import React from "react";
 import Main from "./screens/Main";
+import ThemeProvider from "./ThemeProvider";
 const App = () => {
 
     return (
-        <Main />
+        <ThemeProvider>
+            <Main />
+        </ThemeProvider>
     );
 };
 
