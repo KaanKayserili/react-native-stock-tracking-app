@@ -2,14 +2,13 @@ import { Ionicons } from "@expo/vector-icons"
 import React, { useContext } from "react"
 import { View } from "react-native"
 import { StyleSheet, Text, TouchableOpacity } from "react-native"
-import { ThemeContext } from "../ThemeProvider"
+import { ThemeContext } from "../providers/ThemeProvider"
 import darkColors from "../assets/colors/darkColors"
 import lightColors from "../assets/colors/lightColors"
 
 const RenderedItem = (props) => {
 
     const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-
     const theme = isDarkMode ? darkColors : lightColors;
 
     return (

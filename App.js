@@ -1,14 +1,8 @@
 import React from "react";
-import Main from "./screens/Main";
-import ThemeProvider from "./ThemeProvider";
-const App = () => {
+import SignedInStack from './navigation';
 
-    return (
-        <ThemeProvider>
-            <Main />
-        </ThemeProvider>
-    );
-};
+const App = () => {
+    return <SignedInStack />
+}
 
 export default App;
-

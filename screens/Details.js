@@ -1,7 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import FormContainer from './FormContainer'
+import FormContainer from '../components/FormContainer'
+import { LanguageContext } from '../providers/LanguageProvider'
+import turkish from '../assets/languages/turkish'
+import english from '../assets/languages/english'
 
 const Details = ({ openDetails, setOpenDetails, setStockItems }) => {
   const [id, setID] = useState(openDetails.id);
@@ -12,19 +15,22 @@ const Details = ({ openDetails, setOpenDetails, setStockItems }) => {
   const [checked1, setChecked1] = useState(openDetails.type1);
   const [checked2, setChecked2] = useState(openDetails.type2);
 
+  const { language } = useContext(LanguageContext);
+  const lingo = language === "tr" ? turkish : english;
+
   function edit() {
     setStockItems(prevStockItems => {
       return prevStockItems.map(obj =>
         obj.id === id ? { ...obj, id: id, itemID: itemID, itemName: itemName, itemQuantity: itemQuantity, itemUnit: itemUnit, type1: checked1, type2: checked2 } : obj
       );
     });
-    alert("Stok Başarıyla Güncellendi!")
+    alert(lingo.SuccessfulUpdate)
     setOpenDetails(false);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detaylar</Text>
+      <Text style={styles.title}>{lingo.View}</Text>
 
       <FormContainer setChecked2={setChecked2} checked2={checked2} checked1={checked1} setChecked1={setChecked1}
         itemQuantity={itemQuantity} setItemQuantity={setItemQuantity} itemUnit={itemUnit} setItemUnit={setItemUnit}
@@ -32,7 +38,7 @@ const Details = ({ openDetails, setOpenDetails, setStockItems }) => {
 
       <TouchableOpacity style={styles.button} onPress={edit}>
         <Ionicons name={"close"} size={24} color={"#414141"} />
-        <Text style={styles.buttonText}>Okay</Text>
+        <Text style={styles.buttonText}>{lingo.Update}</Text>
       </TouchableOpacity>
     </View>
   )

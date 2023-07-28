@@ -1,21 +1,25 @@
 import React, { useContext, useState } from "react";
-import { FlatList, Image, Modal, Linking, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
-import Details from "../components/Details";
+import { Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import darkColors from "../assets/colors/darkColors";
+import lightColors from "../assets/colors/lightColors";
+import english from "../assets/languages/english";
+import turkish from "../assets/languages/turkish";
+import AreYouSure from "../components/AreYouSure";
 import FormContainer from "../components/FormContainer";
 import RenderedItem from "../components/RenderedItem";
-import PopUp from "../components/PopUp";
-import lightColors from "../assets/colors/lightColors";
-import darkColors from "../assets/colors/darkColors";
-import { Ionicons } from "@expo/vector-icons";
-import { ThemeContext } from "../ThemeProvider";
-import AreYouSure from "../components/AreYouSure";
+import { LanguageContext } from "../providers/LanguageProvider";
+import { ThemeContext } from "../providers/ThemeProvider";
+import Details from "./Details";
+import PopUp from "./Settings";
 
 const { width, height } = Dimensions.get("screen");
 
 const Main = () => {
 
-    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+    const { language, toggleLanguage } = useContext(LanguageContext);
+    const lingo = language === "tr" ? turkish : english;
 
+    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
     const theme = isDarkMode ? darkColors : lightColors;
 
     const [openDetails, setOpenDetails] = useState(false);
@@ -58,17 +62,6 @@ const Main = () => {
         }
     }
 
-    const openWebsite = async () => {
-        const websiteURL = "https://www.github.com/KaanKayserili";
-        Linking.canOpenURL(websiteURL).then((supported) => {
-            if (supported) {
-                return Linking.openURL(websiteURL);
-            } else {
-                console.log("error")
-            }
-        }).catch((error) => console.error("An error occurred: ", error))
-    }
-
     return (
         <View style={[styles.container, { backgroundColor: theme.Background, }]}>
 
@@ -84,20 +77,6 @@ const Main = () => {
                 <AreYouSure setOpenModal={setOpenModal} setStockItems={setStockItems} />
             </Modal>
 
-            <View>
-                <View style={{ flexDirection: "row", alignItems: "center", marginLeft: width * 0.2718, marginBottom: height * 0.04 }}>
-                    <TouchableOpacity onPress={openWebsite}>
-                        <Image source={isDarkMode ? require("../assets/darkModeLogo.png") : require("../assets/lightModeLogo.png")} style={styles.logo} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => { setOpenModal(true) }} style={[styles.button, { paddingVertical: 10, paddingHorizontal: 10, backgroundColor: theme.Background, borderColor: theme.Border }]}>
-                        <Ionicons name={"options"} size={width * 0.07} color={theme.Icon} />
-                    </TouchableOpacity>
-                </View>
-
-                <Text style={[styles.heading, { color: theme.Text }]}>Stok Takip Uygulaması</Text>
-            </View>
-
             <FlatList
                 data={stockItems}
                 refreshing={true}
@@ -111,7 +90,7 @@ const Main = () => {
                             itemName={itemName} setItemName={setItemName} itemID={itemID} setItemID={setItemID} />
 
                         <TouchableOpacity style={[styles.button, { backgroundColor: theme.Button, borderColor: theme.Border }]} onPress={handleAddItem} >
-                            <Text style={[styles.buttonText, { color: theme.ButtonText }]}>Stok Kartı Ekle</Text>
+                            <Text style={[styles.buttonText, { color: theme.ButtonText }]}>{lingo.AddStockCard}</Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -120,7 +99,7 @@ const Main = () => {
                 )}
                 ListFooterComponent={
                     stockItems.length > 0 ?
-                        <Text style={{ textAlign: "center", color: theme.Unneccessary }}>End of List</Text>
+                        <Text style={{ textAlign: "center", color: theme.Unneccessary }}>{lingo.EndOfList}</Text>
                         : null}
                 keyExtractor={(item) => { return item.id.toString() }}
             />
@@ -133,20 +112,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 40,
-    },
-    logo: {
-        width: width * 0.4564,
-        height: width * 0.2044,
-        resizeMode: 'contain',
-        alignSelf: "center",
-        marginRight: width * 0.1118,
-    },
-    heading: {
-        fontSize: 26,
-        fontWeight: "bold",
-        marginBottom: 20,
-        textAlign: "center",
-        marginTop: -20,
     },
     button: {
         borderWidth: 1,
