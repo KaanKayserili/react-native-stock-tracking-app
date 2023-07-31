@@ -1,8 +1,8 @@
 import React from "react";
-import SignedInStack from './navigation';
+import Navigation from './navigation';
 
 const App = () => {
-    return <SignedInStack />
+    return <Navigation />
 }
 
 export default App;

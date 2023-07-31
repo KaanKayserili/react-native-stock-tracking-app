@@ -1,21 +1,25 @@
-import { Picker } from '@react-native-picker/picker'
-import React, { useContext } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
+
 import darkColors from '../assets/colors/darkColors'
 import lightColors from '../assets/colors/lightColors'
-import { ThemeContext } from '../providers/ThemeProvider'
-import { LanguageContext } from '../providers/LanguageProvider'
-import turkish from '../assets/languages/turkish'
 import english from '../assets/languages/english'
+import turkish from '../assets/languages/turkish'
 
-const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuantity,
-    setItemQuantity, itemUnit, setItemUnit, itemID, setItemID, itemName, setItemName, }) => {
+import { useLanguage } from '../utils/LanguageProvider'
+import { useTheme } from '../utils/ThemeProvider'
+import { PickerComponent } from './Picker'
+import { useItems } from '../utils/ItemsProvider'
 
-    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-    const theme = isDarkMode ? darkColors : lightColors;
+const FormContainer = ({ itemID, setItemID, itemName, setItemName, itemQuantity, setItemQuantity, itemUnit, setItemUnit, checked1, setChecked1, checked2, setChecked2 }) => {
 
-    const { language, toggleLanguage } = useContext(LanguageContext);
+    const { setItems } = useItems();
+
+    const { isDarkMode } = useTheme();
+    const theme = isDarkMode === "true" ? darkColors : lightColors;
+
+    const { language } = useLanguage();
     const lingo = language === "tr" ? turkish : english;
 
 
@@ -23,9 +27,10 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
         <View style={styles.formContainer}>
             <TextInput
                 style={[styles.input, {
-                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                    backgroundColor: theme.Input, borderColor: theme.Border, color: theme.InputText,
                 }]}
                 placeholder={lingo.ProductCode}
+                placeholderTextColor={theme.PlaceHolder}
                 value={itemID}
                 onChangeText={text => setItemID(text)}
                 maxLength={10}
@@ -33,48 +38,26 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
 
             <TextInput
                 style={[styles.input, {
-                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                    backgroundColor: theme.Input, borderColor: theme.Border, color: theme.InputText,
                 }]}
                 placeholder={lingo.ProductName}
+                placeholderTextColor={theme.PlaceHolder}
                 value={itemName}
                 onChangeText={text => setItemName(text)}
                 maxLength={10}
             />
 
             <View style={[styles.pickerContainer, { backgroundColor: theme.Input, borderColor: theme.Border }]}>
-                <Picker selectedValue={itemUnit} onValueChange={(itemValue, itemIndex) => {
-                    setItemUnit(itemValue)
-                }} style={[itemUnit === "bos" ? { color: theme.PlaceHolder } : { color: theme.InputText }]} >
-                    <Picker.Item label={lingo.SelectUnit} value="bos" color={theme.PlaceHolder} />
-                    <Picker.Item label={lingo.Piece} value="adet" color={theme.InputText} />
-                    <Picker.Item label={lingo.Sack} value="çuval" color={theme.InputText} />
-                    <Picker.Item label={lingo.Dozen} value="düzine" color={theme.InputText} />
-                    <Picker.Item label={lingo.Ball} value="top" color={theme.InputText} />
-                    <Picker.Item label={lingo.Barrel} value="varil" color={theme.InputText} />
-                    <Picker.Item label={lingo.Layer} value="tabaka" color={theme.InputText} />
-                    <Picker.Item label={lingo.Box} value="kutu" color={theme.InputText} />
-                    <Picker.Item label={lingo.Package} value="koli" color={theme.InputText} />
-                    <Picker.Item label={lingo.Decimeter} value="desimetre" color={theme.InputText} />
-                    <Picker.Item label={lingo.Container} value="konteyner" color={theme.InputText} />
-                    <Picker.Item label={lingo.Mg} value="mg" color={theme.InputText} />
-                    <Picker.Item label={lingo.Gr} value="gr" color={theme.InputText} />
-                    <Picker.Item label={lingo.Kg} value="kg" color={theme.InputText} />
-                    <Picker.Item label={lingo.Ton} value="ton" color={theme.InputText} />
-                    <Picker.Item label={lingo.Cm} value="cm" color={theme.InputText} />
-                    <Picker.Item label={lingo.Mt} value="m" color={theme.InputText} />
-                    <Picker.Item label={lingo.Km} value="km" color={theme.InputText} />
-                    <Picker.Item label={lingo.M2} value="metrekare" color={theme.InputText} />
-                    <Picker.Item label={lingo.Literes} value="litre" color={theme.InputText} />
-                    <Picker.Item label={lingo.M3} value="metreküp" color={theme.InputText} />
-                </Picker>
+                <PickerComponent itemUnit={itemUnit} theme={theme} lingo={lingo} setItemUnit={setItemUnit} />
             </View>
 
             <TextInput
                 style={[styles.input, {
-                    backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                    backgroundColor: theme.Input, borderColor: theme.Border, color: theme.InputText,
                 }]}
                 placeholder={lingo.Amount}
                 value={itemQuantity}
+                placeholderTextColor={theme.PlaceHolder}
                 onChangeText={text => setItemQuantity(text)}
                 keyboardType="numeric"
                 maxLength={16}
@@ -87,7 +70,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked1 === "Üretim" ? "checked" : "unchecked"}
                         onPress={() => setChecked1("Üretim")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.Production}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.Production}</Text>
                 </View>
 
                 <View style={styles.radioButtonItem}>
@@ -96,7 +79,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked1 === "Satın Alma" ? "checked" : "unchecked"}
                         onPress={() => setChecked1("Satın Alma")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.Buy}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.Buy}</Text>
                 </View>
 
                 <View style={styles.radioButtonItem}>
@@ -105,7 +88,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked1 === "Satış" ? "checked" : "unchecked"}
                         onPress={() => setChecked1("Satış")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.Sales}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.Sales}</Text>
                 </View>
             </View>
 
@@ -116,7 +99,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked2 === "hammadde" ? "checked" : "unchecked"}
                         onPress={() => setChecked2("hammadde")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.Raw}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.Raw}</Text>
                 </View>
 
                 <View style={styles.radioButtonItem}>
@@ -125,7 +108,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked2 === "yarımamul" ? "checked" : "unchecked"}
                         onPress={() => setChecked2("yarımamul")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.SemiProducts}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.SemiProducts}</Text>
                 </View>
 
                 <View style={styles.radioButtonItem}>
@@ -134,7 +117,7 @@ const FormContainer = ({ setChecked2, checked2, checked1, setChecked1, itemQuant
                         status={checked2 === "mamul" ? "checked" : "unchecked"}
                         onPress={() => setChecked2("mamul")} color={theme.Radio} uncheckedColor={theme.Radio}
                     />
-                    <Text>{lingo.Product}</Text>
+                    <Text style={{ fontSize: 16, color: theme.Text }}>{lingo.Product}</Text>
                 </View>
             </View>
         </View>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 
 import { Formik } from 'formik';
@@ -6,24 +6,29 @@ import * as Yup from 'yup';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { LanguageContext } from '../providers/LanguageProvider';
-import { ThemeContext } from '../providers/ThemeProvider';
+import { useLanguage } from '../utils/LanguageProvider';
+import { useTheme } from '../utils/ThemeProvider';
 
 import lightColors from '../assets/colors/lightColors';
 import darkColors from '../assets/colors/darkColors';
 import turkish from '../assets/languages/turkish';
 import english from '../assets/languages/english';
 import { Linking } from 'react-native';
+import { useUser } from '../utils/UserProvider';
+import Button from '../components/Button';
 
 const { width, height } = Dimensions.get("screen");
 
 const Login = ({ navigation }) => {
+    const { user, setUser } = useUser();
 
-    const { language, toggleLanguage } = useContext(LanguageContext);
+    const [isVisiblePassword, setisVisiblePassword] = useState(false);
+
+    const { language } = useLanguage();
     const lingo = language === "tr" ? turkish : english;
 
-    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-    const theme = isDarkMode ? darkColors : lightColors;
+    const { isDarkMode } = useTheme();
+    const theme = isDarkMode === "true" ? darkColors : lightColors;
 
     const LoginSchema = Yup.object().shape({
         email: Yup.string().email('Geçerli bir e-posta adresi girin.').required('E-posta adresi zorunludur.'),
@@ -47,8 +52,8 @@ const Login = ({ navigation }) => {
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema}
             onSubmit={(values) => {
-                // Giriş işlemi burada gerçekleştirilebilir
-                console.log(values);
+                setUser(values);
+                navigation.navigate('Main');
             }}
         >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
@@ -64,33 +69,40 @@ const Login = ({ navigation }) => {
 
                     <TextInput
                         style={[styles.input, {
-                            backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
+                            backgroundColor: theme.Input, borderColor: theme.Border, color: theme.InputText,
                         }]}
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
                         placeholder="E-posta adresi"
+                        placeholderTextColor={theme.PlaceHolder}
                     />
-                    {touched.email && errors.email && <Text>{errors.email}</Text>}
+                    {touched.email && errors.email && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.email}</Text>}
 
-                    <TextInput
-                        style={[styles.input, {
-                            backgroundColor: theme.Input, borderColor: theme.Border, placeholderTextColor: theme.PlaceHolder, color: theme.InputText,
-                        }]}
-                        onChangeText={handleChange('password')}
-                        onBlur={handleBlur('password')}
-                        value={values.password}
-                        placeholder="Şifre"
-                        secureTextEntry
-                    />
-                    {touched.password && errors.password && <Text>{errors.password}</Text>}
+                    <View style={[styles.passwordInputContainer, { width: width * 0.75, backgroundColor: theme.Input, borderColor: theme.Border, }]}>
+                        <TextInput
+                            style={[styles.passwordInput, {
+                                width: width * 0.75 * 0.775, backgroundColor: theme.Input, color: theme.InputText,
+                            }]}
+                            onChangeText={handleChange('password')}
+                            onBlur={handleBlur('password')}
+                            value={values.password}
+                            placeholder={"Şifre"}
+                            secureTextEntry={!isVisiblePassword}
+                            autoCapitalize={"none"}
+                            placeholderTextColor={theme.PlaceHolder}
+                        />
+                        <TouchableOpacity style={{ borderRadius: width * 0.1, borderWidth: 1, borderColor: theme.Border, padding: 5 }} onPress={() => { setisVisiblePassword(prev => !prev) }}>
+                            <Ionicons name={isVisiblePassword ? "eye-off-outline" : "eye-outline"} size={20} color={theme.Icon} />
+                        </TouchableOpacity>
+                    </View>
+                    {touched.password && errors.password && <Text style={{ marginLeft: "15%", marginTop: - 20, marginBottom: 20, color: theme.Unneccessary }}>{errors.password}</Text>}
 
-                    <TouchableOpacity style={[styles.button, { backgroundColor: theme.Button, borderColor: theme.Border, }]} onPress={handleSubmit} disabled={!values.email || !values.password}>
-                        <Text style={[styles.buttonText, { color: theme.buttonText }]}>Giriş Yap</Text>
-                    </TouchableOpacity>
+                    <Button handleSubmit={handleSubmit} text={lingo.Login} width={"40%"} marginLeft={"30%"} />
                 </View>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
     );
 };
 
@@ -119,25 +131,20 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 40,
         borderWidth: 1,
-        borderColor: "black",
         marginBottom: 20,
-        color: "black",
         fontSize: 20,
     },
-    button: {
-        width: "40%",
-        marginLeft: "30%",
+    passwordInputContainer: {
+        flexDirection: "row",
+        borderWidth: 1,
+        marginLeft: "12.5%",
+        borderRadius: 40,
+        marginBottom: 20,
         paddingHorizontal: 20,
         paddingVertical: 10,
-        borderRadius: 40,
-        borderWidth: 1,
-        borderColor: "black",
-        backgroundColor: "white",
     },
-    buttonText: {
+    passwordInput: {
         fontSize: 20,
-        fontWeight: "700",
-        textAlign: "center"
     },
 })
 

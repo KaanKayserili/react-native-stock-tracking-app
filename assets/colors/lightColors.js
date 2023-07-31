@@ -9,8 +9,10 @@ export const lightColors = {
     Border: "gray",
     PlaceHolder: "gray",
     Radio: "#414141",
-    Container: "lightgray",
+    Container: "#FFF",
     Unneccessary: "#515151",
+    Picker:"#FFF",
+    PickerText:"#212121",
 };
 
 export default lightColors

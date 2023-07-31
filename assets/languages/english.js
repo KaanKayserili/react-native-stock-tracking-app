@@ -1,11 +1,13 @@
 export const english = {
-    "settings": "Settings",
+    "Settings": "Settings",
+    "Login": "Sign in",
+    "Quit": "Quit",
+    "Main": "Main Page",
     "AppHeader": "Stock Tracking Application",
     "AddStockCard": "Add Stock Card",
     "EndOfList": "End of List",
     "Production": "Üretim",
     "Producted": "üretildi",
-    "ViewProductsAsList": "View Products as List",
     "ClearStockCompletely": "Clear Stock Completely",
     "ThemeColor": "Theme Color",
     "light": "Light",
@@ -43,7 +45,10 @@ export const english = {
     "SemiProducts": "Semi Products",
     "Product": "Product",
     "SuccessfulUpdate": "Stock Updated Successfully!",
-    "View": "View Stock",
     "Update": "Update",
+    "Details": "Details",
+    "QuantityError": "The amount of inventory entered must be greater than 0.",
+    "EmptyInputError": "Please Enter Full Information.",
+    "ViewAll": "All Stock",
 };
 export default english

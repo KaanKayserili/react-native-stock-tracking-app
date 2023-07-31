@@ -1,11 +1,13 @@
 export const turkish = {
-    "settings": "Ayarlar",
+    "Settings": "Ayarlar",
+    "Login": "Giriş Yap",
+    "Quit": "Çıkış Yap",
+    "Main": "Ana Sayfa",
     "AppHeader": "Stok Takip Uygulaması",
     "AddStockCard": "Stok Kartı Ekle",
     "EndOfList": "Listenin Sonu",
     "Production": "Production",
     "Producted": "producted",
-    "ViewProductsAsList": "Ürünleri Liste Olarak Gör",
     "ClearStockCompletely": "Stoğu Tamamen Temizle",
     "ThemeColor": "Tema Rengi",
     "light": "Açık",
@@ -45,7 +47,10 @@ export const turkish = {
     "SuccessfulUpdate": "Stok Başarıyla Güncellendi!",
     "View": "Görüntüle",
     "Update": "Güncelle",
-
+    "Details": "Ayrıntılar",
+    "QuantityError": "Girilen stoğun miktarı 0'dan büyük olmalıdır.",
+    "EmptyInputError": "Lütfen Bilgileri Tam Giriniz.",
+    "ViewAll": "Stok Tamamı",
 
 };
 

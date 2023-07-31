@@ -1,62 +1,64 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
-import FormContainer from '../components/FormContainer'
-import { LanguageContext } from '../providers/LanguageProvider'
-import turkish from '../assets/languages/turkish'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+
 import english from '../assets/languages/english'
+import turkish from '../assets/languages/turkish'
 
-const Details = ({ openDetails, setOpenDetails, setStockItems }) => {
-  const [id, setID] = useState(openDetails.id);
-  const [itemID, setItemID] = useState(openDetails.itemID);
-  const [itemName, setItemName] = useState(openDetails.itemName);
-  const [itemQuantity, setItemQuantity] = useState(openDetails.itemQuantity);
-  const [itemUnit, setItemUnit] = useState(openDetails.itemUnit);
-  const [checked1, setChecked1] = useState(openDetails.type1);
-  const [checked2, setChecked2] = useState(openDetails.type2);
 
-  const { language } = useContext(LanguageContext);
+import { useLanguage } from '../utils/LanguageProvider'
+import { useItems } from '../utils/ItemsProvider'
+import { View } from 'react-native'
+import FormContainer from '../components/FormContainer'
+import Header from '../components/Header'
+import Button from '../components/Button'
+
+const Details = ({ navigation, route }) => {
+  const { id, itemID, itemName, itemQuantity, itemUnit, checked1, checked2 } = route.params;
+
+
+  const { language } = useLanguage();
   const lingo = language === "tr" ? turkish : english;
 
+  const { setItems } = useItems();
+
+  const [itemID2, setItemID2] = useState(itemID);
+  const [itemName2, setItemName2] = useState(itemName);
+  const [itemQuantity2, setItemQuantity2] = useState(itemQuantity);
+  const [itemUnit2, setItemUnit2] = useState(itemUnit);
+  const [checked12, setChecked12] = useState(checked1);
+  const [checked22, setChecked22] = useState(checked2);
+
   function edit() {
-    setStockItems(prevStockItems => {
-      return prevStockItems.map(obj =>
-        obj.id === id ? { ...obj, id: id, itemID: itemID, itemName: itemName, itemQuantity: itemQuantity, itemUnit: itemUnit, type1: checked1, type2: checked2 } : obj
+    setItems(prev => {
+      return prev.map(obj =>
+        obj.id === id ?
+          { ...obj, id: id, itemID: itemID2, itemName: itemName2, itemQuantity: itemQuantity2, itemUnit: itemUnit2, type1: checked12, type2: checked22 } : obj
       );
     });
-    alert(lingo.SuccessfulUpdate)
-    setOpenDetails(false);
+    alert(lingo.SuccessfulUpdate);
+    navigation.navigate("Main");
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{lingo.View}</Text>
+      <Header text={lingo.Details} func={navigation.goBack} iconName={"close"} />
 
-      <FormContainer setChecked2={setChecked2} checked2={checked2} checked1={checked1} setChecked1={setChecked1}
-        itemQuantity={itemQuantity} setItemQuantity={setItemQuantity} itemUnit={itemUnit} setItemUnit={setItemUnit}
-        itemName={itemName} setItemName={setItemName} itemID={itemID} setItemID={setItemID} />
+      <FormContainer setChecked2={setChecked22} checked2={checked22} setChecked1={setChecked12} checked1={checked12}
+        itemQuantity={itemQuantity2} setItemQuantity={setItemQuantity2} itemUnit={itemUnit2} setItemUnit={setItemUnit2}
+        itemName={itemName2} setItemName={setItemName2} itemID={itemID2} setItemID={setItemID2} />
 
-      <TouchableOpacity style={styles.button} onPress={edit}>
-        <Ionicons name={"close"} size={24} color={"#414141"} />
-        <Text style={styles.buttonText}>{lingo.Update}</Text>
-      </TouchableOpacity>
-    </View>
+      <Button handleSubmit={edit} text={lingo.Update} width={"60%"} marginLeft={"20%"} />
+    </View >
   )
 }
 
-export default Details
+export default Details;
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
-    marginLeft: "10%",
-    flexDirection: "column",
+    flex: 1,
     backgroundColor: "white",
-    borderRadius: 40,
     padding: 20,
-    borderColor: "gray",
-    borderWidth: 1,
-    justifyContent: "space-around",
   },
   title: {
     fontSize: 26,

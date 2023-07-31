@@ -1,61 +1,63 @@
-import React, { useContext, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RadioButton } from 'react-native-paper'
-import { ThemeContext } from '../providers/ThemeProvider'
+
 import darkColors from '../assets/colors/darkColors'
 import lightColors from '../assets/colors/lightColors'
-import { LanguageContext } from '../providers/LanguageProvider'
-import turkish from '../assets/languages/turkish'
 import english from '../assets/languages/english'
-import { Ionicons } from '@expo/vector-icons'
+import turkish from '../assets/languages/turkish'
 
-const { width, height } = Dimensions.get("screen");
+import Button from '../components/Button'
+import Header from '../components/Header'
 
-const Settings = (props) => {
-    const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-    const [checked1, setChecked1] = useState(isDarkMode ? "dark" : "light");
-    const theme = isDarkMode ? darkColors : lightColors;
+import { useItems } from '../utils/ItemsProvider'
+import { useLanguage } from '../utils/LanguageProvider'
+import { useTheme } from '../utils/ThemeProvider'
 
-    const { language, toggleLanguage } = useContext(LanguageContext);
+const Settings = ({ navigation, }) => {
+
+    const { items, setItems } = useItems();
+
+    const { isDarkMode, setIsDarkMode } = useTheme();
+    const [checked1, setChecked1] = useState(isDarkMode === "true" ? "true" : "false");
+    const theme = isDarkMode === "true" ? darkColors : lightColors;
+
+    const { language, setLanguage } = useLanguage();
     const [checked2, setChecked2] = useState(language === "tr" ? "tr" : "en");
     const lingo = language === "tr" ? turkish : english;
 
-    function changeThema() {
-        toggleTheme();
-        setChecked1(isDarkMode ? "light" : "dark");
+    function changeTheme() {
+        setChecked1(isDarkMode === "true" ? "false" : "true");
+        setIsDarkMode(isDarkMode === "true" ? "false" : "true");
+    }
+
+    function goMain() {
+        navigation.navigate("Main", {})
     }
 
     function changeLanguage() {
-        toggleLanguage();
         setChecked2(language === "tr" ? "en" : "tr");
+        setLanguage(language === "tr" ? "en" : "tr");
     }
 
     function deleteAll() {
-        props.setStockItems([]);
-        props.setOpenModal(false);
+        setItems([]);
+        navigation.navigate("Main");
     }
 
-    function viewAll() {
+    function viewExchange() {
 
+    }
+
+    function goQuit() {
+        alert("Başarıyla çıkış yapıldı.");
+        navigation.navigate("Login");
     }
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.Background, borderColor: theme.Border }]}>
-            <View style={{ flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
-                <Text style={[styles.heading, {
-                    color: theme.Text, width: "50%", marginLeft: "25%"
-                }]}>{lingo.settings}</Text>
+        <View style={[styles.container, { backgroundColor: theme.Background }]}>
 
-                <TouchableOpacity style={[styles.button, { width: width * 0.1, backgroundColor: theme.Button }]} onPress={() => { props.setOpenModal(false) }}>
-                    <Ionicons name='close' size={width * 0.05} />
-                </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={[styles.button, { backgroundColor: theme.Button }]}>
-                <Text style={[styles.buttonText, {
-                    color: theme.ButtonText,
-                }]}>{lingo.ViewProductsAsList}</Text>
-            </TouchableOpacity>
+            <Header text={lingo.Settings} func={goMain} iconName={"close"} />
 
             <TouchableOpacity style={[styles.button, { backgroundColor: theme.Button }]} onPress={deleteAll}>
                 <Text style={[styles.buttonText, {
@@ -69,9 +71,9 @@ const Settings = (props) => {
                 <View style={styles.radioButtonContainer}>
                     <View style={styles.radioButtonItem}>
                         <RadioButton
-                            value="light"
-                            status={checked1 === "light" ? "checked" : "unchecked"}
-                            onPress={changeThema} color={theme.Radio} uncheckedColor={theme.Radio}
+                            value="false"
+                            status={checked1 === "false" ? "checked" : "unchecked"}
+                            onPress={changeTheme} color={theme.Radio} uncheckedColor={theme.Radio}
                         />
                         <Text style={[styles.buttonText, {
                             color: theme.Text,
@@ -80,9 +82,9 @@ const Settings = (props) => {
 
                     <View style={styles.radioButtonItem}>
                         <RadioButton
-                            value="dark"
-                            status={checked1 === "dark" ? "checked" : "unchecked"}
-                            onPress={changeThema} color={theme.Radio} uncheckedColor={theme.Radio}
+                            value="true"
+                            status={checked1 === "true" ? "checked" : "unchecked"}
+                            onPress={changeTheme} color={theme.Radio} uncheckedColor={theme.Radio}
                         />
                         <Text style={[styles.buttonText, {
                             color: theme.Text,
@@ -116,7 +118,9 @@ const Settings = (props) => {
                     </View>
                 </View>
             </View>
-        </View>
+
+            <Button handleSubmit={goQuit} text={lingo.Quit} width={"40%"} marginLeft={"30%"} />
+        </View >
     )
 }
 
@@ -124,12 +128,8 @@ export default Settings
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 20,
-        borderWidth: 1.5,
         padding: 20,
-        width: width * 0.7,
-        marginLeft: width * 0.15,
-        marginTop: height * 0.3,
+        flex: 1,
     },
     heading: {
         fontSize: 24,
