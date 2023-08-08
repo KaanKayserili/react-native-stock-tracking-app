@@ -3357,18 +3357,6 @@
     "@expo/config" "~8.0.0"
     "uuid" "^3.3.2"
 
-"expo-document-picker@^11.5.4":
-  "integrity" "sha512-4lpRixi33kjoQQy9lfrGs48yFRMOgBgdnqjYWVFe85WFy/WkEoFC2E8usxcFdrIigtfy9Z+HY3/je4lHEYqyLg=="
-  "resolved" "https://registry.npmjs.org/expo-document-picker/-/expo-document-picker-11.5.4.tgz"
-  "version" "11.5.4"
-
-"expo-file-system@^15.4.2":
-  "integrity" "sha512-WFaEWuFEuUpETiq85YlhKYJgedccWTjtCMnYGAgyNfCfvnIgfMCVH7dWudGuxhfAcTZqh36OcqtSckbtbhOtyg=="
-  "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.4.2.tgz"
-  "version" "15.4.2"
-  dependencies:
-    "uuid" "^3.4.0"
-
 "expo-file-system@~15.2.2":
   "integrity" "sha512-LFkOLcWwlmnjkURxZ3/0ukS35OswX8iuQknLHRHeyk8mUA8fpRPPelD/a1lS+yclqfqavMJmTXVKM1Nsq5XVMA=="
   "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.2.2.tgz"
@@ -3389,18 +3377,6 @@
   "version" "11.1.1"
   dependencies:
     "fontfaceobserver" "^2.1.0"
-
-"expo-image-loader@~4.3.0":
-  "integrity" "sha512-2kqJIO+oYM8J3GbvTUHLqTSpt1dLpOn/X0eB4U4RTuzz/faj8l/TyQELsMBLlGAkweNUuG9LqznbaBz+WuSFEw=="
-  "resolved" "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-4.3.0.tgz"
-  "version" "4.3.0"
-
-"expo-image-picker@^14.3.2":
-  "integrity" "sha512-xr/YeQMIYheXecWP033F2SPwpBlBR5xVCx7YSfSCTH8Y9pw7Z886agqKGbS9QBVGlzJ5qecJktZ6ASSzeslDVg=="
-  "resolved" "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-14.3.2.tgz"
-  "version" "14.3.2"
-  dependencies:
-    "expo-image-loader" "~4.3.0"
 
 "expo-keep-awake@~12.0.1":
   "integrity" "sha512-hqeCnb4033TyuZaXs93zTK7rjVJ3bywXATyMmKmKkLEsH2PKBAl/VmjlCOPQL/2Ncqz6aj7Wo//tjeJTARBD4g=="
@@ -3425,16 +3401,6 @@
   dependencies:
     "compare-versions" "^3.4.0"
     "invariant" "^2.2.4"
-
-"expo-permissions@^14.2.1":
-  "integrity" "sha512-jXGnOODtDMFvK7cwo7wIRPcnA7m1bie80gJ5BdL6Vs5kgCU7+RCLOCp3sBw7TKRPIlVMmQDhZA62bGzoBV0hkA=="
-  "resolved" "https://registry.npmjs.org/expo-permissions/-/expo-permissions-14.2.1.tgz"
-  "version" "14.2.1"
-
-"expo-status-bar@~1.4.4":
-  "integrity" "sha512-5DV0hIEWgatSC3UgQuAZBoQeaS9CqeWRZ3vzBR9R/+IUD87Adbi4FGhU10nymRqFXOizGsureButGZIXPs7zEA=="
-  "resolved" "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.4.4.tgz"
-  "version" "1.4.4"
 
 "expo@*", "expo@~48.0.18":
   "integrity" "sha512-SDRlLRINWWqf/OIPaUr/BsFZLhR5oEj1u9Cn06h1mPeo8pqv6ei/QTSZql4e0ixHIu3PWMPrUx9k/47nnTyTpg=="
